@@ -22,7 +22,7 @@ public class FlinkSourceUtil {
                 .setBootstrapServers(Constant.KAFKA_BROKERS)
                 .setGroupId(groupId)
                 .setTopics(topic)
-                .setStartingOffsets(OffsetsInitializer.latest())
+                .setStartingOffsets(OffsetsInitializer.earliest())
                 //new SimpleStringSchema() 无法发序列化null值的数据 会直接报错
                 .setValueOnlyDeserializer(new DeserializationSchema<String>() {
                     @Override
