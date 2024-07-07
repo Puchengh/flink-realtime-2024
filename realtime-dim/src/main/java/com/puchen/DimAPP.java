@@ -8,15 +8,12 @@ import com.puchen.function.DimBroadcastFunction;
 import com.puchen.function.DimHbaseSinkFunction;
 import com.puchen.util.FlinkSourceUtil;
 import com.puchen.util.HbaseUtil;
-import com.puchen.util.JdbcUtil;
 import com.ververica.cdc.connectors.mysql.source.MySqlSource;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
-import org.apache.flink.api.common.state.BroadcastState;
 import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.BroadcastConnectedStream;
@@ -24,15 +21,11 @@ import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
-import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.flink.util.Collector;
 import org.apache.hadoop.hbase.client.Connection;
 
 import java.io.IOException;
-import java.sql.DriverManager;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class DimAPP extends BaseAPP {
@@ -70,8 +63,6 @@ public class DimAPP extends BaseAPP {
         //5.连接主流和广播流
 
         SingleOutputStreamOperator<Tuple2<JSONObject, TableProcessDim>> dimStream = connectionStream(jsonObjStream, broadcastStream, broadcastState);
-
-        dimStream.print();
 
         //6.筛选出需要写出的字段
         SingleOutputStreamOperator<Tuple2<JSONObject, TableProcessDim>> filterColumnsStream =  filterColum(dimStream);
