@@ -8,9 +8,6 @@ import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
 
-/**
- * 没有经过测试的代码
- */
 public class DwdTradeOrderCancelDetail extends BaseSQLAPP {
 
     public static void main(String[] args) {
