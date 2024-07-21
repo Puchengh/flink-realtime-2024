@@ -62,5 +62,5 @@ public abstract class BaseAPP {
         }
     }
 
-    public abstract void handle(StreamExecutionEnvironment env, DataStreamSource<String> kakfaSource);
+    public abstract void handle(StreamExecutionEnvironment env, DataStreamSource<String> stream);
 }

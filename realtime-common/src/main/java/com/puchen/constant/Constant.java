@@ -16,6 +16,7 @@ public class Constant {
 
     public static final String PROCESS_DATABASE = "gmall2023_config";
     public static final String PROCESS_DIM_TABLE = "table_process_dim";
+    public static final String PROCESS_DWD_TABLE = "table_process_dwd";
 
     public static final String MYSQL_DRIVER = "com.mysql.cj.jdbc.Driver";
     public static final String MYSQL_URL = "jdbc:mysql://slave1:3306?useSSL=false";

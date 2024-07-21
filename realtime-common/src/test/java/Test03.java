@@ -28,6 +28,8 @@ public class Test03 {
                 "  'scan.startup.mode' = 'earliest-offset',\n" +
                 "  'format' = 'json'\n" +
                 ")");
+
+//        tableEnv.executeSql("select TO_TIMESTAMP_LTZ(ts * 1000,3) from topic_db").print();
 ////        Table table = tableEnv.sqlQuery("SELECT  *\n" +
 ////                "FROM topic_db\n" +
 ////                "WHERE `database` = 'gmall'\n" +

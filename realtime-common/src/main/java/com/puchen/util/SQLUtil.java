@@ -20,10 +20,12 @@ public class SQLUtil {
                 "  `database` STRING,\n" +
                 "  `table` STRING,\n" +
                 "  `type` STRING,\n" +
-                "  `ts` BIGINT,\n" +
                 "  `data` map<STRING,STRING>,\n" +
                 "  `old` map<STRING,STRING>,\n" +
-                "  proc_time as PROCTIME()\n" +
+                "  `ts` BIGINT,\n" +
+                "  proc_time as PROCTIME(),\n" +
+                "  row_time as TO_TIMESTAMP_LTZ(ts * 1000,3), \n" +
+                "  WATERMARK FOR row_time AS row_time - INTERVAL '5' SECOND\n" +
                 ") " + getKafkaSourceSQL(Constant.TOPIC_DB, groupId)
                 ;
     }
