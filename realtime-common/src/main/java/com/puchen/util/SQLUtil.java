@@ -44,6 +44,7 @@ public class SQLUtil {
 
     /**
      * 获取upsert kafka的连接  创建表格的语句最后一定要创建主键
+     *
      * @param topicName
      * @return
      */
@@ -56,5 +57,22 @@ public class SQLUtil {
                 "  'value.format' = 'json'\n" +
                 ")";
 
+    }
+
+    /**
+     * doris连接器
+     * @param tableName
+     * @return
+     */
+    public static String getDorisSinkSQL(String tableName) {
+
+        return "WITH (\n" +
+                "      'connector' = 'doris',\n" +
+                "      'fenodes' = '" + Constant.FENONDES + "',\n" +
+                "      'table.identifier' = '" + Constant.DORIS_DATEBASE + "." + tableName + "',\n" +
+                "      'username' = '" + Constant.DORIS_USERNAME + "',\n" +
+                "      'password' = '" + Constant.DORIS_PASSWORD + "',\n" +
+                "      'sink.label-prefix' = 'doris_label" + System.currentTimeMillis() + "'\n" +
+                ")";
     }
 }
