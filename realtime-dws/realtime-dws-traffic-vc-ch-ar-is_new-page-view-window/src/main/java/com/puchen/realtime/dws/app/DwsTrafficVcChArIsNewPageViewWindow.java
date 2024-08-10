@@ -15,6 +15,7 @@ import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
+import org.apache.flink.api.common.state.StateTtlConfig;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.java.functions.KeySelector;
@@ -80,6 +81,11 @@ public class DwsTrafficVcChArIsNewPageViewWindow extends BaseAPP {
             @Override
             public void open(Configuration parameters) throws Exception {
                 ValueStateDescriptor<String> lastLoginDtDesc = new ValueStateDescriptor<>("last_login_dt", String.class);
+                //设置状态的存活时间  Time.days(1L) 24小时的意思
+                lastLoginDtDesc.enableTimeToLive(StateTtlConfig
+                        .newBuilder(org.apache.flink.api.common.time.Time.days(1L))
+                        .setUpdateType(StateTtlConfig.UpdateType.OnCreateAndWrite)  //默认是OnCreateAndWrite
+                        .build());
                 lastLoginDtState = getRuntimeContext().getState(lastLoginDtDesc);
             }
 

@@ -55,7 +55,7 @@ public class DimBroadcastFunction extends BroadcastProcessFunction<JSONObject, T
         //查询广播状态 判断当前的数据对应的表格是否存在于状态里面
         String tableName = jsonObject.getString("table");
         TableProcessDim tableProcessDim = tableProcessState.get(tableName);
-        System.out.println(tableProcessDim);
+//        System.out.println(tableProcessDim);
 
         //如果是数据到的太早造成状态为空
         if (tableProcessDim == null) {

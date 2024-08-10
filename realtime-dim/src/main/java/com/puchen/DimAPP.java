@@ -67,7 +67,7 @@ public class DimAPP extends BaseAPP {
         //6.筛选出需要写出的字段
         SingleOutputStreamOperator<Tuple2<JSONObject, TableProcessDim>> filterColumnsStream =  filterColum(dimStream);
 
-        filterColumnsStream.print();
+//        filterColumnsStream.print();
         //7.写出到HBase
         filterColumnsStream.addSink(new DimHbaseSinkFunction());
 

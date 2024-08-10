@@ -3,11 +3,15 @@ package com.puchen.util;
 import com.alibaba.fastjson.JSONObject;
 import com.puchen.constant.Constant;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class HbaseUtil {
 
@@ -42,6 +46,37 @@ public class HbaseUtil {
                 connection.close();
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 获取到 Hbase 的异步连接
+     *
+     * @return 得到异步连接对象
+     */
+    public static AsyncConnection getHBaseAsyncConnection() {
+        Configuration conf = new Configuration();
+        conf.set("hbase.zookeeper.quorum", "master");
+        conf.set("hbase.zookeeper.property.clientPort", "2181");
+        try {
+            return ConnectionFactory.createAsyncConnection(conf).get();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 关闭 hbase 异步连接
+     *
+     * @param asyncConn 异步连接
+     */
+    public static void closeAsyncHbaseConnection(AsyncConnection asyncConn) {
+        if (asyncConn != null) {
+            try {
+                asyncConn.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -134,6 +169,34 @@ public class HbaseUtil {
     }
 
     /**
+     * 获取数据
+     * @param connection
+     * @param namespace
+     * @param tableName
+     * @param rowKey
+     * @return
+     * @throws IOException
+     */
+    public static JSONObject getCells(Connection connection, String namespace, String tableName, String rowKey) throws IOException {
+        Table table = connection.getTable(TableName.valueOf(namespace, tableName));
+        Get get = new Get(Bytes.toBytes(rowKey));
+        JSONObject jsonObject = new JSONObject();
+
+        //创建get对象
+        try{
+            Result result = table.get(get);
+            for (Cell cell : result.rawCells()) {
+                jsonObject.put(new String(CellUtil.cloneQualifier(cell), StandardCharsets.UTF_8),new String(CellUtil.cloneValue(cell), StandardCharsets.UTF_8));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        table.close();
+        return jsonObject;
+    }
+
+    /**
      * 删除数据
      *
      * @param connection
@@ -151,6 +214,45 @@ public class HbaseUtil {
             e.printStackTrace();
         }
         table.close();
+
+    }
+
+    /**
+     * 异步的从 hbase 读取维度数据
+     *
+     * @param hBaseAsyncConn hbase 的异步连接
+     * @param nameSpace      命名空间
+     * @param tableName      表名
+     * @param rowKey         rowKey
+     * @return 读取到的维度数据, 封装到 json 对象中.
+     */
+    public static JSONObject readDimAsync(AsyncConnection hBaseAsyncConn,
+                                          String nameSpace,
+                                          String tableName,
+                                          String rowKey) {
+        AsyncTable<AdvancedScanResultConsumer> asyncTable = hBaseAsyncConn
+                .getTable(TableName.valueOf(nameSpace, tableName));
+
+        Get get = new Get(Bytes.toBytes(rowKey));
+        try {
+            // 获取 result
+            Result result = asyncTable.get(get).get();
+            List<Cell> cells = result.listCells();  // 一个 Cell 表示这行中的一列
+            JSONObject dim = new JSONObject();
+            for (Cell cell : cells) {
+                // 取出每列的列名(json 对象的中的 key)和列值(json 对象中的 value)
+                String key = Bytes.toString(CellUtil.cloneQualifier(cell));
+                String value = Bytes.toString(CellUtil.cloneValue(cell));
+
+                dim.put(key, value);
+            }
+
+            return dim;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 
     }
 }
