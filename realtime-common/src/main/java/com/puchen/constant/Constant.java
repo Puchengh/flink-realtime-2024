@@ -41,7 +41,7 @@ public class Constant {
 
     public static final String TOPIC_DWD_USER_REGISTER = "dwd_user_register";
 
-    public static final String FENONDES = "main:8030";
+    public static final String FENONDES = "192.168.31.128:8030";
     public static final String DORIS_DATEBASE = "gmall2023_realtime";
     public static final String DORIS_USERNAME = "root";
     public static final String DORIS_PASSWORD = "123456";
