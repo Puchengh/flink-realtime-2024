@@ -3,7 +3,6 @@ package com.puchen.realtime.dwd.db.app;
 import com.puchen.base.BaseSQLAPP;
 import com.puchen.constant.Constant;
 import com.puchen.util.SQLUtil;
-import com.sun.org.apache.bcel.internal.Const;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
