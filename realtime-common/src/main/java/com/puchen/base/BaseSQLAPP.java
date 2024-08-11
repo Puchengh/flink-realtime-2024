@@ -28,21 +28,21 @@ public abstract class BaseSQLAPP {
         env.setParallelism(parallelism);
 
         // 1.4.1 状态后端
-        env.setStateBackend(new HashMapStateBackend());  //状态后端
-        // 1.4.2 开启 checkpoint
-        env.enableCheckpointing(5000);
-        // 1.4.3 设置 checkpoint 模式: 精准一次
-        env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
-        // 1.4.4 checkpoint 存储
-        env.getCheckpointConfig().setCheckpointStorage("hdfs://master:8020/gmall2023/stream/" + ckAndGroupId);
-        // 1.4.5 checkpoint 并发数
-        env.getCheckpointConfig().setMaxConcurrentCheckpoints(1);
-        // 1.4.6 checkpoint 之间的最小间隔
-        env.getCheckpointConfig().setMinPauseBetweenCheckpoints(5000);
-        // 1.4.7 checkpoint  的超时时间
-        env.getCheckpointConfig().setCheckpointTimeout(10000);
-        // 1.4.8 job 取消时 checkpoint 保留策略
-        env.getCheckpointConfig().setExternalizedCheckpointCleanup(RETAIN_ON_CANCELLATION);
+//        env.setStateBackend(new HashMapStateBackend());  //状态后端
+//        // 1.4.2 开启 checkpoint
+//        env.enableCheckpointing(5000);
+//        // 1.4.3 设置 checkpoint 模式: 精准一次
+//        env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
+//        // 1.4.4 checkpoint 存储
+//        env.getCheckpointConfig().setCheckpointStorage("hdfs://master:8020/gmall2023/stream/" + ckAndGroupId);
+//        // 1.4.5 checkpoint 并发数
+//        env.getCheckpointConfig().setMaxConcurrentCheckpoints(1);
+//        // 1.4.6 checkpoint 之间的最小间隔
+//        env.getCheckpointConfig().setMinPauseBetweenCheckpoints(5000);
+//        // 1.4.7 checkpoint  的超时时间
+//        env.getCheckpointConfig().setCheckpointTimeout(10000);
+//        // 1.4.8 job 取消时 checkpoint 保留策略
+//        env.getCheckpointConfig().setExternalizedCheckpointCleanup(RETAIN_ON_CANCELLATION);
 
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
 
