@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.puchen</groupId>
-        <artifactId>realtime-dwd</artifactId>
+        <artifactId>realtime-dws</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>realtime-dwd-interaction-comment-info</artifactId>
+    <artifactId>realtime-dws-trade-province-order-window</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
